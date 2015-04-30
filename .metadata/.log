@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 !SESSION 2015-04-30 16:12:32.374 -----------------------------------------------
 eclipse.buildId=4.4.2.M20150204-1700
 java.version=1.8.0_31
@@ -7,6 +8,17 @@ Framework arguments:  -product org.eclipse.epp.package.java.product -product org
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product -data C:\Users\Tobias\Documents\GitHub\disuebung -product org.eclipse.epp.package.java.product
 
 !ENTRY org.eclipse.egit.ui 2 0 2015-04-30 16:13:19.340
+=======
+!SESSION 2015-04-29 17:54:31.270 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.7.0
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=de_DE
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2015-04-29 17:54:44.623
+>>>>>>> e5e10cc4ab3e4631bbbf19a67f1a540c948c618d
 !MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
 Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
 The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
@@ -14,6 +26,7 @@ this system level configuration. The Git installation location can be configured
 Team > Git > Configuration preference page's 'System Settings' tab.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
 
+<<<<<<< HEAD
 !ENTRY org.eclipse.egit.ui 2 0 2015-04-30 16:13:19.340
 !MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
 user global configuration and to define the default location to store repositories: 'C:\Users\Tobias'. If this is
@@ -29,3 +42,11 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 
 !ENTRY org.eclipse.jdt.core 2 0 2015-04-30 16:13:42.166
 !MESSAGE The Java indexing could not index Aufgabe3/lib/db2jcc.jar|COM/ibm/db2os390/sqlj/custom/DB2SQLJProfile.class. This .class file doesn't follow the class file format specification. Please report this issue against the .class file vendor
+=======
+!ENTRY org.eclipse.egit.ui 2 0 2015-04-29 17:54:44.628
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Marius'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+>>>>>>> e5e10cc4ab3e4631bbbf19a67f1a540c948c618d

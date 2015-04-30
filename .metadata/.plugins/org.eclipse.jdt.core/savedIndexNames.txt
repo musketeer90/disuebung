@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INDEX VERSION 1.127+C:\Users\Tobias\Documents\GitHub\disuebung\.metadata\.plugins\org.eclipse.jdt.core
 358050146.index
 1654984216.index
@@ -30,3 +31,18 @@ INDEX VERSION 1.127+C:\Users\Tobias\Documents\GitHub\disuebung\.metadata\.plugin
 901363647.index
 1782685408.index
 2448026493.index
+=======
+INDEX VERSION 1.127+C:\Development\workspaces\disuebung\.metadata\.plugins\org.eclipse.jdt.core
+3065916431.index
+3133528496.index
+163172794.index
+3974580528.index
+1995173708.index
+1115467115.index
+1697886153.index
+30765161.index
+4155206848.index
+305854171.index
+3005525493.index
+1498219845.index
+>>>>>>> e5e10cc4ab3e4631bbbf19a67f1a540c948c618d
