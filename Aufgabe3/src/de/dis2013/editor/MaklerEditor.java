@@ -99,6 +99,7 @@ public class MaklerEditor {
 				m.setLogin(new_login);
 			if(!new_password.equals(""))
 				m.setPasswort(new_password);
+			service.updateMakler(m);
 		}
 	}
 	
@@ -114,7 +115,11 @@ public class MaklerEditor {
 		//Makler löschen falls nicht "zurück" ausgewählt wurde
 		if(id != MaklerSelectionMenu.BACK) {
 			Makler m = service.getMaklerById(id);
+			try {
 			service.deleteMakler(m);
+			} catch (Exception e) {
+				System.out.println("Makler kann nicht gelöscht werden wegen gesetzten Foreign Keys!");			
+		}
 		}
 	}
 }

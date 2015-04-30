@@ -151,6 +151,7 @@ public class ImmobilienEditor {
 				h.setKaufpreis(newKaufpreis);
 			
 			h.setGarten(newGarten);
+			service.updateHouse(h);
 		}
 	}
 	

@@ -60,10 +60,10 @@ public class Main {
 					}
 					break;
 				case MENU_PERSON:
-//					if(ma.authenticate()) {
+					if(ma.authenticate()) {
 						PersonEditor pe = new PersonEditor(service);
 						pe.showPersonMenu();
-//					}
+					}
 					break;
 				case MENU_IMMO:
 					if(ma.authenticate()) {

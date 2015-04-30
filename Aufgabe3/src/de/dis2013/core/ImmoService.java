@@ -32,9 +32,6 @@ import de.dis2013.data.Wohnung;
  */
 public class ImmoService {
 	//Datensätze im Speicher
-	private Set<Makler> makler = new HashSet<Makler>();
-	private Set<Person> personen = new HashSet<Person>();
-	private Set<Haus> haeuser = new HashSet<Haus>();
 	private Set<Wohnung> wohnungen = new HashSet<Wohnung>();
 	private Set<Mietvertrag> mietvertraege = new HashSet<Mietvertrag>();
 	private Set<Kaufvertrag> kaufvertraege = new HashSet<Kaufvertrag>();
@@ -123,6 +120,12 @@ public class ImmoService {
 	 * Gibt alle Makler zurück
 	 */
 	public Set<Makler> getAllMakler() {
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from makler").addEntity(Makler.class);
+		Set<Makler> makler = new HashSet<Makler>();
+		makler.addAll((List<Makler>) query.list());
+		session.getTransaction().commit();
 		return makler;
 	}
 	
@@ -158,7 +161,6 @@ public class ImmoService {
 	 * @param m Der Makler
 	 */
 	public void addMakler(Makler m) {
-		makler.add(m);
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		session.save(m);
@@ -170,10 +172,9 @@ public class ImmoService {
 	 * @param m Der Makler
 	 */
 	public void deleteMakler(Makler m) {
-		makler.remove(m);
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		session.save(m);
+		session.delete(m);
 		session.getTransaction().commit();
 	}
 	
@@ -182,7 +183,6 @@ public class ImmoService {
 	 * @param p Die Person
 	 */
 	public void addPerson(Person p) {
-		personen.add(p);
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		session.save(p);
@@ -222,12 +222,22 @@ public class ImmoService {
 		session.getTransaction().commit();
 	}
 	
+	public void updateMakler(Makler m) {
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.update(m);
+		session.getTransaction().commit();
+	}
+	
 	/**
 	 * Fügt ein Haus hinzu
 	 * @param h Das Haus
 	 */
 	public void addHaus(Haus h) {
-		haeuser.add(h);
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.save(h);
+		session.getTransaction().commit();
 	}
 	
 	/**
@@ -236,17 +246,18 @@ public class ImmoService {
 	 * @return Alle Häuser, die vom Makler verwaltet werden
 	 */
 	public Set<Haus> getAllHaeuserForMakler(Makler m) {
-		Set<Haus> ret = new HashSet<Haus>();
-		Iterator<Haus> it = haeuser.iterator();
 		
-		while(it.hasNext()) {
-			Haus h = it.next();
-			
-			if(h.getVerwalter().equals(m))
-				ret.add(h);
-		}
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from haeuser where verwalter = ?").addEntity(Haus.class).setEntity(0, m);
 		
-		return ret;
+//		List result = query.list();
+		Set<Haus> haus = new HashSet<Haus>();
+		haus.addAll((List<Haus>) query.list());
+		session.getTransaction().commit();
+		Iterator<Haus> it = haus.iterator();
+						
+		return haus;
 	}
 	
 	/**
@@ -255,7 +266,15 @@ public class ImmoService {
 	 * @return Das Haus oder null, falls nicht gefunden
 	 */
 	public Haus getHausById(int id) {
-		Iterator<Haus> it = haeuser.iterator();
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from haeuser where id = '" + id + "'").addEntity(Haus.class);
+		
+//		List result = query.list();
+		Set<Haus> haus = new HashSet<Haus>();
+		haus.addAll((List<Haus>) query.list());
+		session.getTransaction().commit();
+		Iterator<Haus> it = haus.iterator();
 		
 		while(it.hasNext()) {
 			Haus h = it.next();
@@ -272,9 +291,19 @@ public class ImmoService {
 	 * @param p Das Haus
 	 */
 	public void deleteHouse(Haus h) {
-		haeuser.remove(h);
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.delete(h);
+		session.getTransaction().commit();
 	}
 	
+	
+	public void updateHouse(Haus h) {
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.update(h);
+		session.getTransaction().commit();
+	}
 	/**
 	 * Fügt eine Wohnung hinzu
 	 * @param w die Wohnung
@@ -473,19 +502,19 @@ public class ImmoService {
 		Session session = sessionFactory.openSession();
 		
 //		session.beginTransaction();
-//		
-//		Makler m = new Makler();
-//		m.setName("Max Mustermann");
-//		m.setAdresse("Am Informatikum 9");
-//		m.setLogin("max");
-//		m.setPasswort("max");
-//		
-//		//TODO: Dieser Makler wird im Speicher und der DB gehalten
-//		this.addMakler(m);
+		
+		Makler m = new Makler();
+		m.setName("Max Mustermann");
+		m.setAdresse("Am Informatikum 9");
+		m.setLogin("max");
+		m.setPasswort("max");
+		
+		//TODO: Dieser Makler wird im Speicher und der DB gehalten
+		this.addMakler(m);
 //		session.save(m);
 //		session.getTransaction().commit();
 
-		session.beginTransaction();
+//		session.beginTransaction();
 		
 		Person p1 = new Person();
 		p1.setAdresse("Informatikum");
@@ -502,87 +531,87 @@ public class ImmoService {
 //		session.save(p2);
 //		
 		//TODO: Diese Personen werden im Speicher und der DB gehalten
-//		this.addPerson(p1);
-//		this.addPerson(p2);
+		this.addPerson(p1);
+		this.addPerson(p2);
 //		session.getTransaction().commit();
 		
 		//Hibernate Session erzeugen
 //		session.beginTransaction();
-//		Haus h = new Haus();
-//		h.setOrt("Hamburg");
-//		h.setPlz(22527);
-//		h.setStrasse("Vogt-Kölln-Straße");
-//		h.setHausnummer("2a");
-//		h.setFlaeche(384);
-//		h.setStockwerke(5);
-//		h.setKaufpreis(10000000);
-//		h.setGarten(true);
-//		h.setVerwalter(m);
+		Haus h = new Haus();
+		h.setOrt("Hamburg");
+		h.setPlz(22527);
+		h.setStrasse("Vogt-Kölln-Straße");
+		h.setHausnummer("2a");
+		h.setFlaeche(384);
+		h.setStockwerke(5);
+		h.setKaufpreis(10000000);
+		h.setGarten(true);
+		h.setVerwalter(m);
 		
 //		session.save(h);
 		
 		//TODO: Dieses Haus wird im Speicher und der DB gehalten
-//		this.addHaus(h);
-		session.getTransaction().commit();
+		this.addHaus(h);
+//		session.getTransaction().commit();
 		
 		//Hibernate Session erzeugen
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-//		Makler m2 = (Makler)session.get(Makler.class, m.getId());
-//		Set<Immobilie> immos = m2.getImmobilien();
-//		Iterator<Immobilie> it = immos.iterator();
+		Makler m2 = (Makler)session.get(Makler.class, m.getId());
+		Set<Immobilie> immos = m2.getImmobilien();
+		Iterator<Immobilie> it = immos.iterator();
 		
-//		while(it.hasNext()) {
-//			Immobilie i = it.next();
-//			System.out.println("Immo: "+i.getOrt());
-//		}
+		while(it.hasNext()) {
+			Immobilie i = it.next();
+			System.out.println("Immo: "+i.getOrt());
+		}
 		session.close();
 		
-//		Wohnung w = new Wohnung();
-//		w.setOrt("Hamburg");
-//		w.setPlz(22527);
-//		w.setStrasse("Vogt-Kölln-Straße");
-//		w.setHausnummer("3");
-//		w.setFlaeche(120);
-//		w.setStockwerk(4);
-//		w.setMietpreis(790);
-//		w.setEbk(true);
-//		w.setBalkon(false);
-//		w.setVerwalter(m);
-//		this.addWohnung(w);
+		Wohnung w = new Wohnung();
+		w.setOrt("Hamburg");
+		w.setPlz(22527);
+		w.setStrasse("Vogt-Kölln-Straße");
+		w.setHausnummer("3");
+		w.setFlaeche(120);
+		w.setStockwerk(4);
+		w.setMietpreis(790);
+		w.setEbk(true);
+		w.setBalkon(false);
+		w.setVerwalter(m);
+		this.addWohnung(w);
 		
-//		w = new Wohnung();
-//		w.setOrt("Berlin");
-//		w.setPlz(22527);
-//		w.setStrasse("Vogt-Kölln-Straße");
-//		w.setHausnummer("3");
-//		w.setFlaeche(120);
-//		w.setStockwerk(4);
-//		w.setMietpreis(790);
-//		w.setEbk(true);
-//		w.setBalkon(false);
-//		w.setVerwalter(m);
-//		this.addWohnung(w);
+		w = new Wohnung();
+		w.setOrt("Berlin");
+		w.setPlz(22527);
+		w.setStrasse("Vogt-Kölln-Straße");
+		w.setHausnummer("3");
+		w.setFlaeche(120);
+		w.setStockwerk(4);
+		w.setMietpreis(790);
+		w.setEbk(true);
+		w.setBalkon(false);
+		w.setVerwalter(m);
+		this.addWohnung(w);
 		
-//		Kaufvertrag kv = new Kaufvertrag();
-//		kv.setHaus(h);
-//		kv.setVertragspartner(p1);
-//		kv.setVertragsnummer(9234);
-//		kv.setDatum(new Date(System.currentTimeMillis()));
-//		kv.setOrt("Hamburg");
-//		kv.setAnzahlRaten(5);
-//		kv.setRatenzins(4);
-//		this.addKaufvertrag(kv);
+		Kaufvertrag kv = new Kaufvertrag();
+		kv.setHaus(h);
+		kv.setVertragspartner(p1);
+		kv.setVertragsnummer(9234);
+		kv.setDatum(new Date(System.currentTimeMillis()));
+		kv.setOrt("Hamburg");
+		kv.setAnzahlRaten(5);
+		kv.setRatenzins(4);
+		this.addKaufvertrag(kv);
 //		
-//		Mietvertrag mv = new Mietvertrag();
-//		mv.setWohnung(w);
-//		mv.setVertragspartner(p2);
-//		mv.setVertragsnummer(23112);
-//		mv.setDatum(new Date(System.currentTimeMillis()-1000000000));
-//		mv.setOrt("Berlin");
-//		mv.setMietbeginn(new Date(System.currentTimeMillis()));
-//		mv.setNebenkosten(65);
-//		mv.setDauer(36);
-//		this.addMietvertrag(mv);
+		Mietvertrag mv = new Mietvertrag();
+		mv.setWohnung(w);
+		mv.setVertragspartner(p2);
+		mv.setVertragsnummer(23112);
+		mv.setDatum(new Date(System.currentTimeMillis()-1000000000));
+		mv.setOrt("Berlin");
+		mv.setMietbeginn(new Date(System.currentTimeMillis()));
+		mv.setNebenkosten(65);
+		mv.setDauer(36);
+		this.addMietvertrag(mv);
 	}
 }
