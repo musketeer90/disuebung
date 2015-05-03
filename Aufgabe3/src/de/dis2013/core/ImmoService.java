@@ -407,17 +407,21 @@ public class ImmoService {
 	 * @return Alle Mietverträge, die zu Wohnungen gehören, die vom Makler verwaltet werden
 	 */
 	public Set<Mietvertrag> getAllMietvertraegeForMakler(Makler m) {
-		Set<Mietvertrag> ret = new HashSet<Mietvertrag>();
-		Iterator<Mietvertrag> it = mietvertraege.iterator();
+
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from mietvertraege").addEntity(Mietvertrag.class);
 		
-		while(it.hasNext()) {
-			Mietvertrag v = it.next();
-			
-			if(v.getWohnung().getVerwalter().equals(m))
-				ret.add(v);
-		}
 		
-		return ret;
+//		List result = query.list();
+		Set<Mietvertrag> mietvertrag= new HashSet<Mietvertrag>();
+		
+		mietvertrag.addAll((List<Mietvertrag>) query.list());
+		session.getTransaction().commit();
+		Iterator<Mietvertrag> it = mietvertrag.iterator();
+		
+		return mietvertrag;
+		
 	}
 	
 	/**
@@ -426,17 +430,18 @@ public class ImmoService {
 	 * @return Alle Kaufverträge, die zu Häusern gehören, die vom Makler verwaltet werden
 	 */
 	public Set<Kaufvertrag> getAllKaufvertraegeForMakler(Makler m) {
-		Set<Kaufvertrag> ret = new HashSet<Kaufvertrag>();
-		Iterator<Kaufvertrag> it = kaufvertraege.iterator();
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from kaufvertraege").addEntity(Kaufvertrag.class);
 		
-		while(it.hasNext()) {
-			Kaufvertrag k = it.next();
-			
-			if(k.getHaus().getVerwalter().equals(m))
-				ret.add(k);
-		}
+//		List result = query.list();
+		Set<Kaufvertrag> kaufvertrag= new HashSet<Kaufvertrag>();
 		
-		return ret;
+		kaufvertrag.addAll((List<Kaufvertrag>) query.list());
+		session.getTransaction().commit();
+		Iterator<Kaufvertrag> it = kaufvertrag.iterator();
+		
+		return kaufvertrag;
 	}
 	
 	/**
