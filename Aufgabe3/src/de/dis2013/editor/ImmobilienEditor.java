@@ -248,6 +248,8 @@ public class ImmobilienEditor {
 			
 			w.setEbk(newEbk);
 			w.setBalkon(newBalkon);
+
+			service.updateWohnung(w);
 		}
 	}
 	

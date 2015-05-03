@@ -309,7 +309,10 @@ public class ImmoService {
 	 * @param w die Wohnung
 	 */
 	public void addWohnung(Wohnung w) {
-		wohnungen.add(w);
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.save(w);
+		session.getTransaction().commit();
 	}
 	
 	/**
@@ -318,17 +321,17 @@ public class ImmoService {
 	 * @return Alle Wohnungen, die vom Makler verwaltet werden
 	 */
 	public Set<Wohnung> getAllWohnungenForMakler(Makler m) {
-		Set<Wohnung> ret = new HashSet<Wohnung>();
-		Iterator<Wohnung> it = wohnungen.iterator();
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from wohnungen where verwalter = ?").addEntity(Wohnung.class).setEntity(0, m);
 		
-		while(it.hasNext()) {
-			Wohnung w = it.next();
-			
-			if(w.getVerwalter().equals(m))
-				ret.add(w);
-		}
-		
-		return ret;
+//		List result = query.list();
+		Set<Wohnung> wohnung = new HashSet<Wohnung>();
+		wohnung.addAll((List<Wohnung>) query.list());
+		session.getTransaction().commit();
+		Iterator<Wohnung> it = wohnung.iterator();
+						
+		return wohnung;
 	}
 	
 	/**
@@ -337,16 +340,31 @@ public class ImmoService {
 	 * @return Die Wohnung oder null, falls nicht gefunden
 	 */
 	public Wohnung getWohnungById(int id) {
-		Iterator<Wohnung> it = wohnungen.iterator();
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from wohnungen where id = '" + id + "'").addEntity(Wohnung.class);
+		
+//		List result = query.list();
+		Set<Wohnung> wohnung = new HashSet<Wohnung>();
+		wohnung.addAll((List<Wohnung>) query.list());
+		session.getTransaction().commit();
+		Iterator<Wohnung> it = wohnung.iterator();
 		
 		while(it.hasNext()) {
-			Wohnung w = it.next();
+			Wohnung h = it.next();
 			
-			if(w.getId() == id)
-				return w;
+			if(h.getId() == id)
+				return h;
 		}
 		
 		return null;
+	}
+	
+	public void updateWohnung(Wohnung w) {
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.update(w);
+		session.getTransaction().commit();
 	}
 	
 	/**
@@ -354,7 +372,10 @@ public class ImmoService {
 	 * @param p Die Wohnung
 	 */
 	public void deleteWohnung(Wohnung w) {
-		wohnungen.remove(w);
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.delete(w);
+		session.getTransaction().commit();
 	}
 	
 	
