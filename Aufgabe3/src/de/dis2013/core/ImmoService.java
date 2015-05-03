@@ -384,7 +384,10 @@ public class ImmoService {
 	 * @param w Der Mietvertrag
 	 */
 	public void addMietvertrag(Mietvertrag m) {
-		mietvertraege.add(m);
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.save(m);
+		session.getTransaction().commit();
 	}
 	
 	/**
@@ -392,7 +395,10 @@ public class ImmoService {
 	 * @param w Der Kaufvertrag
 	 */
 	public void addKaufvertrag(Kaufvertrag k) {
-		kaufvertraege.add(k);
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.save(k);
+		session.getTransaction().commit();
 	}
 	
 	/**
@@ -512,7 +518,10 @@ public class ImmoService {
 	 * @param m Der Mietvertrag
 	 */
 	public void deleteMietvertrag(Mietvertrag m) {
-		wohnungen.remove(m);
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		session.delete(m);
+		session.getTransaction().commit();
 	}
 	
 	/**
