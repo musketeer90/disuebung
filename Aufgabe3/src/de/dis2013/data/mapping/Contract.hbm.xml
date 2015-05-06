@@ -11,6 +11,8 @@
 		<property name="datum" type="date" column="datum" />
 		<property name="ort" type="string" column="ort" />
 		
+		<many-to-one name="vertragspartner" class="de.dis2013.data.Person" column="vertragspartner" not-null="true" />
+		
 		<union-subclass name="de.dis2013.data.Mietvertrag" table="mietvertraege">
 			<property name="mietbeginn" type="date" column="mietbeginn" />
 			<property name="dauer" type="integer" column="dauer" />

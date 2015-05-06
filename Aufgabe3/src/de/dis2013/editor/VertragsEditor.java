@@ -78,6 +78,9 @@ public class VertragsEditor {
 		while(itmv.hasNext()) {
 			Mietvertrag mv = itmv.next();
 			System.out.println("Mietvertrag "+mv.getVertragsnummer()+"\n"+
+					"\tGeschlossen am "+Helper.dateToString(mv.getDatum())+" in "+mv.getOrt()+"\n"+
+					"\tMieter:        "+mv.getVertragspartner().getVorname()+" "+mv.getVertragspartner().getNachname()+"\n");
+			System.out.println("Mietvertrag "+mv.getVertragsnummer()+"\n"+
 							"\tGeschlossen am "+Helper.dateToString(mv.getDatum())+" in "+mv.getOrt()+"\n"+
 							"\tMieter:        "+mv.getVertragspartner().getVorname()+" "+mv.getVertragspartner().getNachname()+"\n"+
 							"\tWohnung:       "+mv.getWohnung().getStrasse()+" "+mv.getWohnung().getHausnummer()+", "+mv.getWohnung().getPlz()+" "+mv.getWohnung().getOrt()+"\n"+

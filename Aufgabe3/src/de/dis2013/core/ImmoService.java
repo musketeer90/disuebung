@@ -417,7 +417,7 @@ public class ImmoService {
 		Set<Mietvertrag> mietvertrag= new HashSet<Mietvertrag>();
 		
 		mietvertrag.addAll((List<Mietvertrag>) query.list());
-		session.getTransaction().commit();
+//		session.getTransaction().commit();
 		Iterator<Mietvertrag> it = mietvertrag.iterator();
 		
 		return mietvertrag;
