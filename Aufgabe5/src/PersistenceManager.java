@@ -19,9 +19,7 @@ public class PersistenceManager {
 		}
 	}
 	
-	private PersistenceManager() {
-		
-	}
+	private PersistenceManager() {}
 	
 	static public PersistenceManager getInstance() {
 		return pm;
@@ -34,27 +32,7 @@ public class PersistenceManager {
 		return id;
 	}
 	
-	static public synchronized void recover(int pageID){
-		ListIterator<UserData> iteratorUser = pm.userData.listIterator();
-		UserData ud = null;
-		boolean userDataUpToDate = false;
-		while(iteratorUser.hasNext()) {
-			ud = iteratorUser.next();
-			if(ud.getPageID() == pageID){
-				userDataUpToDate = true;
-			}
-		}
-		
-		if(!userDataUpToDate){
-			System.out.println("UserData is maybe not up to date. Page: " + pageID);
-			RecoveryManager rm = new RecoveryManager(".");
-			rm.redo(pageID);
-		}
-	}
-	
 	static public synchronized void write(int taid, int pageID, String data) {	
-		pm.recover(pageID);
-		
 		UserData ud = new UserData(pageID, pm.lsn.value(), taid, data);
 		pm.userData.add(ud);
 		LogData ld = new LogData(pageID, pm.lsn.value(), taid, data, false);
