@@ -254,7 +254,7 @@ public class MovieService extends MovieServiceBase {
 	 *            the comment to save
 	 */
 	public void saveMovieComment(String id, String comment) {
-		//TODO: implement
+		//TODO: implement -> done
 		//create query object
 		BasicDBObject query = new BasicDBObject("_id", id);
 		//update object
@@ -271,7 +271,7 @@ public class MovieService extends MovieServiceBase {
 	 * @return the DBCursor for the query
 	 */
 	public DBCursor getGeotaggedTweets(int limit) {
-		//TODO : implement
+		//TODO : implement -> done
 		BasicDBObject query = new BasicDBObject("coordinates", new BasicDBObject("$exists", true));
 		DBCursor result = tweets.find(query);
 		result.limit(limit);
@@ -445,8 +445,15 @@ public class MovieService extends MovieServiceBase {
 	 */
 	public DBCursor getNewestTweets(int limit) {
 		//TODO : implement
+		/*
 		DBCursor result = null;
 		return result;
+		*/
+		
+		//TODO : implement -> done
+	    DBObject sortOrder = new BasicDBObject("_id", -1);
+	    DBCursor result = tweets.find().sort(sortOrder).limit(limit);
+	    return result;
 	}
 
 	/**
@@ -508,8 +515,22 @@ public class MovieService extends MovieServiceBase {
 	 */
 	public GridFSDBFile getFile(String name) {
 		//TODO: implement
+		/*
 		GridFSDBFile file = null;
 		return file;
+		*/
+        //TODO: implement -> done
+        BasicDBObject filename = new BasicDBObject("filename", name);
+        List<GridFSDBFile> gridFSDBFiles = fs.find(filename);
+        if (gridFSDBFiles != null && gridFSDBFiles.size() > 0) {
+            GridFSDBFile file = gridFSDBFiles.get(0);
+            return file;
+        } else {
+            filename = new BasicDBObject("filename", "sample.png");
+            GridFSDBFile file = fs.find(filename).get(0);
+            return file;
+        }
+
 	}
 
 	/**
@@ -522,10 +543,21 @@ public class MovieService extends MovieServiceBase {
 	 * @param contentType
 	 */
 	public void saveFile(String name, InputStream inputStream, String contentType) {
+		/*
 		GridFSInputFile gFile = null;
 		//Remove old versions
 		fs.remove(name);
 		//TODO: implement
+		 */
+		
+        //TODO: implement -> done
+        GridFSInputFile gFile = null;
+        //Remove old versions
+        fs.remove(name);
+        gFile = fs.createFile(inputStream, name);
+        gFile.setContentType(contentType);
+        gFile.save();
+
 	}
 
 	// Given Helper Functions:
