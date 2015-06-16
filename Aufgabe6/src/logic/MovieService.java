@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.naming.spi.DirStateFactory.Result;
+
 import twitter.TweetListener;
 import twitter4j.GeoLocation;
 import twitter4j.Status;
@@ -386,16 +388,25 @@ public class MovieService extends MovieServiceBase {
 	 * @return the DBCursor for the query
 	 */
 	public DBCursor getByTweetsKeywordRegex(String keyword, int limit) {
-		//TODO : implement
-		DBCursor result = null;
-		BasicDBObject query = new BasicDBObject("tweets", new BasicDBObject("$regex", ".*"+keyword+".*").append("$options", "i"));
-		DBCursor tw = tweets.find(query);
-		while(tw.hasNext()) {
-			DBObject obj = tw.next();
-			//TODO an string von title kommen und dann von movies collection den 
-			//movie zu cursor result hinzufügen
-		}
-		return result;
+		  //TODO : implement -> done
+		  BasicDBObject TweetQuery = new BasicDBObject("text", new BasicDBObject("$regex", ".*"+keyword+".*").append("$options", "i"));
+		  DBCursor TweetsWithKeywords = tweets.find(TweetQuery);
+		  System.out.println("tweet length: " + TweetsWithKeywords.size());
+		  
+		  BasicDBObject MovieQuery = new BasicDBObject();
+		  List<BasicDBObject> movie_titles = new ArrayList<BasicDBObject>();
+		 
+		  while(TweetsWithKeywords.hasNext()) {
+		   DBObject obj = TweetsWithKeywords.next();
+
+		   String movietitle = obj.get("movie").toString();
+		   movie_titles.add(new BasicDBObject("title", movietitle));
+		  }
+		  
+		  MovieQuery.put("$or", movie_titles);
+		  DBCursor results = movies.find(MovieQuery);
+		  
+		  return results;
 	}
 
 	/**
