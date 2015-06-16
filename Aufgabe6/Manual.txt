@@ -1,0 +1,81 @@
+db. films . insert ({
+title : " Star Trek Into Darkness ",
+year : 2013 ,
+genre : [
+" Action ",
+" Adventure ",
+"Sci -Fi",
+],
+actors : [
+"Pine , Chris ",
+"Quinto , Zachary ",
+" Saldana , Zoe",
+],
+releases : [
+{
+country : "USA",
+date : ISODate (" 2013-05-17 "),
+prerelease : true
+},
+{
+country : " Germany ",
+date : ISODate (" 2003-05-16 "),
+prerelease : false
+}
+]
+})
+
+db. films . insert ({
+title : " Iron Man 3",
+year : 2013 ,
+genre : [
+" Action ",
+" Adventure ",
+"Sci -Fi",
+],
+actors : [
+" Downey Jr., Robert ",
+" Paltrow , Gwyneth ",
+]
+})
+
+db. films . insert ({
+title : " This Means War",
+year : 2011 ,
+genre : [
+" Action ",
+" Comedy ",
+" Romance ",
+],
+actors : [
+"Pine , Chris ",
+" Witherspoon , Reese ",
+"Hardy , Tom",
+],
+releases : [
+{
+country : "USA",
+date : ISODate (" 2011-02-17 "),
+prerelease : false
+},
+{
+country : "UK",
+date : ISODate (" 2011-03-01 "),
+prerelease : true
+}
+]
+})
+db.films.insert({
+title : "The Amazing Spider -Man 2",
+year : 2014 ,
+genre : [
+" Action ",
+" Adventure ",
+" Fantasy ",
+],
+actors : [
+"Stone , Emma ",
+" Woodley , Shailene "
+]
+})
+

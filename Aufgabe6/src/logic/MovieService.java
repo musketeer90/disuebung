@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import twitter.TweetListener;
 import twitter4j.GeoLocation;
 import twitter4j.Status;
 import twitter4j.json.DataObjectFactory;
@@ -78,6 +79,7 @@ public class MovieService extends MovieServiceBase {
 		movies.createIndex(new BasicDBObject("rating", 1));
 		movies.createIndex(new BasicDBObject("votes", 1));
 		movies.createIndex(new BasicDBObject("tweets.coordinates", 1));
+		tweets.createIndex(new BasicDBObject("coordinates", 1));
 		
 		
 		tweets.ensureIndex(new BasicDBObject("coordinates", "2dsphere"));
@@ -90,8 +92,6 @@ public class MovieService extends MovieServiceBase {
 		System.out.println("Test Query");
 		//Test Query
 		System.out.println(movies.findOne(new BasicDBObject("title", "Spiderman")));
-		
-
 	}
 
 	/**
@@ -255,7 +255,11 @@ public class MovieService extends MovieServiceBase {
 	 */
 	public void saveMovieComment(String id, String comment) {
 		//TODO: implement
-		
+		//create query object
+		BasicDBObject query = new BasicDBObject("_id", id);
+		//update object
+		BasicDBObject update = new BasicDBObject("$set", new BasicDBObject("comment", comment));
+		movies.update(query, update);
 	}
 
 	/**
@@ -268,7 +272,9 @@ public class MovieService extends MovieServiceBase {
 	 */
 	public DBCursor getGeotaggedTweets(int limit) {
 		//TODO : implement
-		DBCursor result = null;
+		BasicDBObject query = new BasicDBObject("coordinates", new BasicDBObject("$exists", true));
+		DBCursor result = tweets.find(query);
+		result.limit(limit);
 		return result;
 	}
 
@@ -284,7 +290,13 @@ public class MovieService extends MovieServiceBase {
 	 * @return the DBCursor for the query
 	 */
 	public DBCursor getTaggedTweets() {
-		//TODO : implement
+//		//TODO : implement
+//		BasicDBObject query = new BasicDBObject("coordinates", new BasicDBObject("$exists", true));
+//		BasicDBObject project = new BasicDBObject("movie":1, "text":1);
+//		DBCursor tagged = tweets.find(query);
+//		
+//		
+//		
 		DBObject projection = null;
 		DBObject query = null;
 		DBObject sort = null;
@@ -376,6 +388,13 @@ public class MovieService extends MovieServiceBase {
 	public DBCursor getByTweetsKeywordRegex(String keyword, int limit) {
 		//TODO : implement
 		DBCursor result = null;
+		BasicDBObject query = new BasicDBObject("tweets", new BasicDBObject("$regex", ".*"+keyword+".*").append("$options", "i"));
+		DBCursor tw = tweets.find(query);
+		while(tw.hasNext()) {
+			DBObject obj = tw.next();
+			//TODO an string von title kommen und dann von movies collection den 
+			//movie zu cursor result hinzufügen
+		}
 		return result;
 	}
 
